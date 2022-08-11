@@ -7,43 +7,65 @@ import { data } from './data';
 function App() {
 
   const [cities, setCities] = useState(data);
-  const [placesToVisit, setPlacesToVisit] = useState(data.placesToVisit);
+  const {idCountry, city, image, visitPlaces} = data[cities];
+  const [placesToVisit, setPlacesToVisit] = useState(data.visitPlaces);
+  
   const removeSight = (id) => {
-    let newSightList = placesToVisit.filter(placesToVisit => placesToVisit.id !== id); 
+    let newSightList = visitPlaces.filter(visitPlaces => visitPlaces.id !== id); 
     setPlacesToVisit(newSightList);
+  }
+
+  const previousCity = () => {
+    setCities((cities => {
+      cities --;
+      if (cities < 0) {
+        return data.length-1;
+      }
+      return cities;
+    }))
+  }
+
+  const nextCity = () => {
+    setCities((cities => {
+      cities ++;
+      if (cities > data.length-1) {
+        cities = 0;
+      }
+      return cities;
+    }))
   }
 
 
 
 
   return (
-    <div  className="container">
-      {cities.map((thing => {
-        const {idCountry, city, image, placesToVisit} = thing;
-        return (
-          <div key={idCountry}>            
-            <p>{idCountry}. {city} </p>
-            <div className="container">
-              <img src={image} width="300px" alt="city" />
-            </div>
-            <div>
-              {placesToVisit.map((placesToVisit, index) => 
-              <li key={index}>{placesToVisit}
-                <div className="container">
-                    <button onClick={() => removeSight(id)}>Remove</button>
+    <div>
+     <div className="container">
+		<p>{idCountry}. {city} </p>
+</div>
+
+
+
+<div className="container">
+        <img src={image} width="300px" alt="city" />
+      </div>
+      
+     <div>
+         {placesToVisit.map((visitPlaces, index) => 
+            <li key={index}>{visitPlaces}
+               <div className="container">
+                  <button onClick={() => removeSight(id)}>Remove</button>
                 </div>
               </li>)}
-            </div> 
-            
-            
+     </div>
 
-          </div>
 
-          
-        )
-      }))}
-      <button onClick={() => setCities([])}>Delete</button>
-    </div>
+<div className="btn container">
+        <button onClick={previousCity}>Previous</button>
+        <button onClick={nextCity}>Next</button>
+      </div>
+</div>
+
 );
 
 
